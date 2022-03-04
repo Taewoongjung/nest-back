@@ -1,10 +1,12 @@
-import {Body, Controller, Get, Post, Req} from '@nestjs/common';
+import {Body, Controller, Get, Post, Req, UseInterceptors} from '@nestjs/common';
 import {JoinRequestDto} from "./dto/join.request.dto";
 import {UsersService} from "./users.service";
 import {ApiOperation, ApiResponse} from "@nestjs/swagger";
 import {UserDto} from "../common/dto/user.dto";
 import {User} from "../common/decorator/user.decorator";
+import {UndefinedToNullInterceptor} from "../common/interceptors/undefinedToNull.interceptor";
 
+@UseInterceptors(UndefinedToNullInterceptor) // 앞으로 해당 컨트롤러에서 리턴하는 값은 undefined가 null로 바뀌어서 리턴된다. (개별적으로 적용 가능)
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) {}
@@ -47,6 +49,8 @@ export class UsersController {
     login(@User() user) {
         return user;
     }
+    // interceptor는 응답 할 때 데이터를 보내는 형식을 보내기 전에 한번 더 알아서
+    // interceptor가 바꿔줄 수 있다.
 
     @ApiOperation({ summary: '로그아웃' })
     @Post('logout')
