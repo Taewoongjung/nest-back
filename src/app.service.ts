@@ -13,8 +13,7 @@ export class AppService {
   constructor(private readonly configService: ConfigService ,private usersService: UsersService) {}
 
   async getHello() {
-    this.usersService.getUser();
-    this.usersService.postUsers('a','a','a');
+    this.usersService.join('a','a','a');
     return this.configService.get('SECRET');
   }
 }

@@ -27,6 +27,7 @@ import {Workspacemembers} from "./entities/Workspacemembers";
       WorkspacesModule,
       ChannelsModule,
       DmsModule,
+      TypeOrmModule.forFeature([Users]),
       TypeOrmModule.forRoot({
         type: 'mysql',
         host: 'localhost',
@@ -45,8 +46,9 @@ import {Workspacemembers} from "./entities/Workspacemembers";
             Workspacemembers,
             Workspaces,
         ],
-        synchronize: true, // false로 해두어야 데이터 날려먹지 않는다
+        synchronize: false, // false로 해두어야 데이터 날려먹지 않는다
         logging: true,
+          keepConnectionAlive: true
       })
   ],
   controllers: [AppController],

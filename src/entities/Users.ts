@@ -1,5 +1,5 @@
 import {
-  Column,
+  Column, CreateDateColumn,
   Entity,
   Index,
   OneToMany,
@@ -11,25 +11,44 @@ import { DMs } from "./DMs";
 import { Mentions } from "./Mentions";
 import { Workspacemembers } from "./Workspacemembers";
 import { Workspaces } from "./Workspaces";
+import {ApiProperty} from "@nestjs/swagger";
+import {IsNotEmpty, IsString} from "class-validator";
+import {timestamp} from "rxjs";
 
 @Index("email", ["email"], { unique: true })
 @Entity("users", { schema: "nestjs" })
 export class Users {
+
+  @ApiProperty({
+    example: 1,
+    description: '사용자 아이디',
+  })
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: 'aipooh8882@naver.com',
+    description: '이메일',
+  })
   @Column("varchar", { name: "email", unique: true, length: 30 })
   email: string;
 
+  @IsString()
+  @IsNotEmpty()
   @Column("varchar", { name: "nickname", length: 30 })
   nickname: string;
 
+  @IsString()
+  @IsNotEmpty()
   @Column("varchar", { name: "password", length: 100 })
   password: string;
 
-  @Column("datetime", { name: "createdAt" })
+  @CreateDateColumn({ name: 'createdAt', type: 'datetime' })
   createdAt: Date;
 
+  @CreateDateColumn({ name: 'updatedAt', type: 'datetime' })
   @Column("datetime", { name: "updatedAt" })
   updatedAt: Date;
 

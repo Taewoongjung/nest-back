@@ -31,7 +31,7 @@ const config: TypeOrmModuleOptions = {
   migrations: [__dirname + '/src/migrations/*.ts'],
   cli: { migrationsDir: 'src/migrations' },
   charset: 'utf8mb4',
-  synchronize: true,
+  synchronize: false,
   logging: true,
   keepConnectionAlive: true, // 코드가 바뀌고 hot reloading이 실행될 때 DB가 끊기지 않도록 해주는거다.
 };

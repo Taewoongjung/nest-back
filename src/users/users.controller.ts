@@ -1,13 +1,14 @@
-import {Body, Controller, Get, Post, Req, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Get, Post, Req, UseGuards, UseInterceptors} from '@nestjs/common';
 import {JoinRequestDto} from "./dto/join.request.dto";
 import {UsersService} from "./users.service";
 import {ApiOperation, ApiResponse} from "@nestjs/swagger";
 import {UserDto} from "../common/dto/user.dto";
 import {User} from "../common/decorator/user.decorator";
 import {UndefinedToNullInterceptor} from "../common/interceptors/undefinedToNull.interceptor";
+import {LocalAuthGuard} from "../auth/local-auth.guard";
 
 @UseInterceptors(UndefinedToNullInterceptor) // 앞으로 해당 컨트롤러에서 리턴하는 값은 undefined가 null로 바뀌어서 리턴된다. (개별적으로 적용 가능)
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
@@ -30,8 +31,8 @@ export class UsersController {
 
     @ApiOperation({ summary: '회원가입' })
     @Post()
-    postUsers(@Body() data: JoinRequestDto) {
-        this.usersService.postUsers(data.email, data.nickname, data.password);
+    async join(@Body() body: JoinRequestDto) {
+        await this.usersService.join(body.email, body.nickname, body.password);
         return;
     }
 
@@ -45,6 +46,7 @@ export class UsersController {
         description: '서버 에러'
     })
     @ApiOperation({ summary: '로그인' })
+    @UseGuards(LocalAuthGuard)
     @Post('login')
     login(@User() user) {
         return user;
